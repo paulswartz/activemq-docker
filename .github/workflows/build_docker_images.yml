@@ -58,3 +58,5 @@ jobs:
           platforms: ${{ env.PLATFORMS }}
           push: true
           tags: "${{ env.IMAGE }}:${{ matrix.version }}${{ env.ADDITIONAL_TAGS }}"
+          cache-from: type=registry,ref=${{ env.IMAGE }}:latest
+          cache-to: type=inline

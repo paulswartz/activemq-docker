@@ -1,0 +1,28 @@
+<plugins>
+  <simpleAuthenticationPlugin>
+    <users>
+      <authenticationUser username="system" password="manager"
+      groups="users,admins" />
+      <authenticationUser username="user" password="password"
+      groups="users" />
+      <authenticationUser username="guest" password="password"
+      groups="guests" />
+    </users>
+  </simpleAuthenticationPlugin>
+  <authorizationPlugin>
+    <map>
+      <authorizationMap>
+        <authorizationEntries>
+          <authorizationEntry topic="ActiveMQ.Advisory.&gt;"
+          read="*" write="*" admin="*" />
+          <authorizationEntry topic="&gt;" read="users,admins"
+          write="users,admins" admin="users,admins" />
+        </authorizationEntries>
+        <tempDestinationAuthorizationEntry>
+          <tempDestinationAuthorizationEntry read="admins"
+          write="admins" admin="admins" />
+        </tempDestinationAuthorizationEntry>
+      </authorizationMap>
+    </map>
+  </authorizationPlugin>
+</plugins>

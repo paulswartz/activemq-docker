@@ -2,7 +2,7 @@ FROM bellsoft/liberica-openjdk-alpine:17
 
 LABEL maintainer="Thomas Lutz <lutz@symptoma.com>"
 
-ENV ACTIVEMQ_VERSION 5.18.0
+ARG ACTIVEMQ_VERSION=5.17.3
 ENV ACTIVEMQ apache-activemq-$ACTIVEMQ_VERSION
 ENV ACTIVEMQ_HOME /opt/activemq
 
@@ -19,6 +19,8 @@ RUN apk add --update curl && \
 EXPOSE 1883 5672 8161 61613 61614 61616
 
 COPY entrypoint.sh /
+COPY conf/* $ACTIVEMQ_HOME/conf
+
 RUN chmod +x /entrypoint.sh
 
 USER activemq

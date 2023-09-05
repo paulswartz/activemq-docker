@@ -25,11 +25,13 @@ fi
 if [ -n "$ACTIVEMQ_USERNAME" ]; then
   echo "Setting activemq username to $ACTIVEMQ_USERNAME"
   sed -i "s#activemq.username=system#activemq.username=$ACTIVEMQ_USERNAME#" conf/credentials.properties
+  sed -i "s#username=\"system\"#username=\"$ACTIVEMQ_USERNAME\"#" conf/docker-plugins.xml
 fi
 
 if [ -n "$ACTIVEMQ_PASSWORD" ]; then
   echo "Setting activemq password"
   sed -i "s#activemq.password=manager#activemq.password=$ACTIVEMQ_PASSWORD#" conf/credentials.properties
+  sed -i "s#password=\"manager\"#password=\"$ACTIVEMQ_PASSWORD\"#" conf/docker-plugins.xml
 fi
 
 if [ -n "$ACTIVEMQ_WEBADMIN_USERNAME" ]; then
@@ -53,6 +55,9 @@ if [ "$ACTIVEMQ_ENABLE_SCHEDULER" = "true" ]; then
   echo "Enabling the scheduler"
   sed -i 's#<broker xmlns="http://activemq.apache.org/schema/core" brokerName="localhost" dataDirectory="${activemq.data}">#<broker xmlns="http://activemq.apache.org/schema/core" brokerName="localhost" dataDirectory="${activemq.data}" schedulerSupport="true">#' conf/activemq.xml 
 fi
+
+## Add plugin configuration
+sed -i '/<broker/ r conf/docker-plugins.xml' conf/activemq.xml
 
 # Start
 bin/activemq console

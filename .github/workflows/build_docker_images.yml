@@ -7,14 +7,45 @@ on:
 
 env:
   REGISTRY: ghcr.io
+  IMAGE: "ghcr.io/${{ github.repository_owner }}/activemq"
+  LATEST_VERSION: "5.18.2"
 
 jobs:
-  Build:
+  build_latest:
+    name: Build latest version
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Log in to GHCR
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build tag for GHCR
+        env:
+          FORCE_BUILD: 1
+        run: |
+          ./build.sh "$IMAGE" "$LATEST_VERSION"
+          docker tag "$IMAGE:$LATEST_VERSION" "$IMAGE:latest"
+          docker push "$IMAGE:latest"
+  build_rest:
+    name: Build other versions
     continue-on-error: true
     strategy:
       matrix:
         include:
+          - version: "5.18.2"
+          - version: "5.18.1"
+          - version: "5.18.0"
+          # AWS engine versions: https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/activemq-version-management.html
           - version: "5.17.3"
+          - version: "5.17.2"
+          - version: "5.17.1"
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -33,4 +64,4 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build tag for GHCR (if needed)
-        run: ./build.sh "${{ env.REGISTRY }}/${{ github.repository_owner }}/activemq" "${{ matrix.version }}"
+        run: ./build.sh "${{ env.IMAGE }}" "${{ matrix.version }}"

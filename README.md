@@ -2,12 +2,12 @@
 
 Based on [bellsoft/liberica-openjdk-alpine:17](https://hub.docker.com/r/bellsoft/liberica-openjdk-alpine), as lightweight as possible AND multiarch (Support for Apple M1 chip / aarch64 aka ARM64). 
 
-Published on the Docker Hub: https://hub.docker.com/r/symptoma/activemq
+Published on the GitHub Container Registry: https://github.com/paulswartz/activemq-docker/pkgs/container/activemq
 
 ## Usage
 
 ```
-docker run -it -p 61616:61616 -p 8161:8161 symptoma/activemq:latest
+docker run -it -p 61616:61616 -p 8161:8161 ghcr.io/paulswartz/activemq:5.18.2
 ```
 Bind more ports if you need to.
 
@@ -26,7 +26,7 @@ symptoma/activemq:latest
 
 ## ActiveMQ version
 
-Current version of ActiveMQ is **5.18.0**: https://archive.apache.org/dist/activemq/5.18.0/
+Current version of ActiveMQ is **5.18.2**: https://archive.apache.org/dist/activemq/5.18.2/
 
 Note: Since ActiveMQ 5.16.0 the Web Console is not reachable by default, as it only listens to 127.0.0.1 inside the container. See [AMQ-8018](https://issues.apache.org/jira/browse/AMQ-8018) for more details.
 

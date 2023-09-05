@@ -1,0 +1,36 @@
+name: Build images for gchr.io
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  Build:
+    continue-on-error: true
+    strategy:
+      matrix:
+        include:
+          - version: "5.17.3"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Force build if workflow_dispatch or re-run
+        id: force
+        if: github.event_name == 'workflow_dispatch' || github.run_attempt != '1'
+        run: echo "FORCE_BUILD=1" >> $GITHUB_ENV
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Log in to GHCR
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build tag for GHCR (if needed)
+        run: ./build.sh "${{ env.REGISTRY }}/${{ github.repository_owner }}/activemq" "${{ matrix.version }}"

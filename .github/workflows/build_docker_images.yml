@@ -8,7 +8,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE: "ghcr.io/${{ github.repository_owner }}/activemq"
-  LATEST_VERSION: "5.18.2"
+  LATEST_VERSION: "5.18.4"
   PLATFORMS: linux/amd64,linux/arm64
 
 jobs:
@@ -19,11 +19,15 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - version: "5.18.2"
+          # Releases: https://activemq.apache.org/components/classic/download/
+          - version: "5.18.4"
             latest: "latest"
+          - version: "5.18.3"
+          - version: "5.18.2"
           - version: "5.18.1"
           - version: "5.18.0"
           # AWS engine versions: https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/activemq-version-management.html
+          - version: "5.17.6"
           - version: "5.17.3"
           - version: "5.17.2"
           - version: "5.17.1"
